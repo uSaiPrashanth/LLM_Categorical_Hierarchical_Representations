@@ -77,7 +77,8 @@ def noun_to_gemma_vocab_elements(word, vocab_set):
     plural = p.plural(word)
     add_cap_and_plural = [word, word.capitalize(), plural, plural.capitalize()]
     add_space = ["▁" + w for w in add_cap_and_plural]
-    return vocab_set.intersection(add_space)
+    all_vocab = add_cap_and_plural + add_space
+    return vocab_set.intersection(all_vocab)
 
 
 def get_animal_category(data, categories, vocab_dict, g):
