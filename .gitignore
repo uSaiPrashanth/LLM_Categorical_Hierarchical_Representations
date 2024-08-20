@@ -1,4 +1,6 @@
 __pycache__/
+binary/
+.env
 *.*/
 *.pth
 *.pyc
