@@ -1,15 +1,22 @@
+#%%
 import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from tqdm import tqdm
+import dotenv
 
-model_name = "meta-llama/Meta-Llama-3-8B"
+config = dotenv.dotenv_values(".env")
+model_name = config["MODEL_NAME"]
+g_file_path = config["G_FILE_PATH"]
+inv_sq_gamma_pth = config["INV_SQ_GAMMA_PTH"]
+
 
 ### load model ###
-device = torch.device("cuda:1")
+device = torch.device("cuda:0")
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name,
-                                             torch_dtype=torch.float32).to(device)
+                                             torch_dtype=torch.float32,
+                                             device_map="auto")
 
 
 ### load unembdding vectors ###
@@ -27,5 +34,5 @@ g = centered_gamma @ inv_sqrt_Cov_gamma
 
 
 ## Use this PATH to load g in the notebooks
-torch.save(g, "matricies.pth")
-torch.save(inv_sqrt_Cov_gamma, "inv_sqrt_Cov_gamma.pth")
+torch.save(g, g_file_path)
+torch.save(inv_sqrt_Cov_gamma, inv_sq_gamma_pth)
